@@ -22,7 +22,7 @@ const generateMockVideo = (id: number): Video => {
 
   return {
     id: id.toString(),
-    title: `Gaming ${id}: ${randomCategories[0].charAt(0).toUpperCase() + randomCategories[0].slice(1)} Adventure`,
+    title: `${randomCategories[0].charAt(0).toUpperCase() + randomCategories[0].slice(1)} Adventure`,
     thumbnail: randomThumbnail,
     duration: `${Math.floor(Math.random() * 30) + 5}:${Math.floor(Math.random() * 60).toString().padStart(2, '0')}`,
     quality: randomQuality,
