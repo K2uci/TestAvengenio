@@ -2,9 +2,13 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { useAuthStore } from '../store/useAuthStore';
 import { useThemeStore } from '../store/useThemeStore';
-import { Sun, Moon, LogOut, LogIn } from 'lucide-react';
+import { Sun, Moon, LogOut, LogIn, Menu } from 'lucide-react';
 
-export const Navbar: React.FC = () => {
+interface NavbarProps {
+  onToggleSidebar: () => void;
+}
+
+export const Navbar: React.FC<NavbarProps> = ({ onToggleSidebar }) => {
   const { isAuthenticated, logout } = useAuthStore();
   const { isDarkMode, toggleTheme } = useThemeStore();
 
@@ -23,8 +27,17 @@ export const Navbar: React.FC = () => {
 
           <div className="flex items-center space-x-4">
             <button
+              onClick={onToggleSidebar}
+              className="md:hidden p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700"
+              aria-label="Toggle filters"
+            >
+              <Menu className="w-5 h-5 text-gray-600 dark:text-gray-300" />
+            </button>
+
+            <button
               onClick={toggleTheme}
               className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700"
+              aria-label="Toggle theme"
             >
               {isDarkMode ? (
                 <Sun className="w-5 h-5 text-gray-600 dark:text-gray-300" />

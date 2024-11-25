@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { VideoCard } from '../components/VideoCard';
 import { VideoModal } from '../components/VideoModal';
 import { Sidebar } from '../components/Sidebar';
+import { FeaturedVideo } from '../components/FeaturedVideo';
+import { Navbar } from '../components/Navbar';
 import { VideoFilters, Video } from '../types/video';
 import { mockVideos } from '../data/mockData';
 
@@ -14,6 +16,7 @@ export const Home: React.FC = () => {
   });
 
   const [selectedVideo, setSelectedVideo] = useState<Video | null>(null);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   const filteredVideos = mockVideos.filter((video) => {
     const matchesSearch = video.title
@@ -28,31 +31,42 @@ export const Home: React.FC = () => {
   });
 
   return (
-    <div className="flex min-h-screen bg-gray-100 dark:bg-gray-900">
-      <Sidebar filters={filters} onFilterChange={setFilters} />
+    <div className="min-h-screen bg-gray-100 dark:bg-gray-900">
+      <Navbar onToggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)} />
       
-      <main className="flex-1 p-6">
-        <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">
-          Available Videos
-        </h1>
+      <div className="flex">
+        <Sidebar 
+          filters={filters} 
+          onFilterChange={setFilters} 
+          isOpen={isSidebarOpen}
+          onClose={() => setIsSidebarOpen(false)}
+        />
         
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {filteredVideos.map((video) => (
-            <VideoCard 
-              key={video.id} 
-              video={video} 
-              onClick={() => setSelectedVideo(video)}
-            />
-          ))}
-        </div>
+        <main className="flex-1 p-6">
+          <FeaturedVideo />
+          
+          <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">
+            Available Videos
+          </h1>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {filteredVideos.map((video) => (
+              <VideoCard 
+                key={video.id} 
+                video={video} 
+                onClick={() => setSelectedVideo(video)}
+              />
+            ))}
+          </div>
 
-        {selectedVideo && (
-          <VideoModal
-            video={selectedVideo}
-            onClose={() => setSelectedVideo(null)}
-          />
-        )}
-      </main>
+          {selectedVideo && (
+            <VideoModal
+              video={selectedVideo}
+              onClose={() => setSelectedVideo(null)}
+            />
+          )}
+        </main>
+      </div>
     </div>
   );
 };
